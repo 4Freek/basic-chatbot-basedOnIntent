@@ -2,6 +2,7 @@ import makeWASocket from "@adiwajshing/baileys";
 import { emitter } from "../shared/events/emitter";
 import { Base } from "../shared/interfaces/provider.base.interface";
 import { BaileysProvider } from "./Baileys/baileys.provider";
+import { WwebjsProvider } from "./whatsapp-webJs/wwebjs.provider";
 
 // Provider extends from base provider which implements an interface that exposes the 
 // required functionality
@@ -42,6 +43,9 @@ export class Provider extends Base {
         switch (this.provider) {
             case 'baileys':
                 new BaileysProvider().create(options).then(client => this.client = client)
+                break
+            case 'wwebjs':
+                new WwebjsProvider().create(options).then(client => this.client = client)
                 break
             default:
                 new BaileysProvider().create(options).then(client => this.client = client)

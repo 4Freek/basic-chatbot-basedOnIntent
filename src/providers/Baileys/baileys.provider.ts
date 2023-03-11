@@ -5,6 +5,7 @@ import makeWASocket, {
     DisconnectReason,
     fetchLatestBaileysVersion,
     makeInMemoryStore,
+    MessageUpsertType,
     MiscMessageGenerationOptions,
     proto,
     useMultiFileAuthState,
@@ -152,15 +153,7 @@ export class BaileysProvider extends Base {
     
     
             sock.ev.on('messages.upsert', async (message) => {
-                if (!['append', 'notify'].includes(message.type)) return
-    
-                if (message.messages[0].key.remoteJid === 'status@broadcast') return;
-                
-                const body = message.messages[0].message?.conversation ||
-                                message.messages[0].message?.extendedTextMessage?.text
-
-                if (body) return
-                // if (m?.messages[0].key?.fromMe) return;
+                if (this.invalidate(message)) return;
                 
                 emitter.emit('message', (message))
     
@@ -180,5 +173,18 @@ export class BaileysProvider extends Base {
                 })
             }
         }
+    }
+
+    private invalidate(message: {
+        messages: proto.IWebMessageInfo[],
+        type: MessageUpsertType
+    }) {
+        return (
+            !['append', 'notify'].includes(message.type) ||
+            message.messages[0].key.remoteJid === 'status@broadcast' ||
+            !(message.messages[0].message?.conversation ||
+                message.messages[0].message?.extendedTextMessage?.text) ||
+            message?.messages[0].key?.fromMe
+        )
     }
 }
