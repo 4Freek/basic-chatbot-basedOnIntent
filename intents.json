@@ -1,0 +1,36 @@
+{
+    "intents": [
+        {
+            "intent": "Hola",
+            "patterns": [
+                "epale",
+                "heu",
+                "hi",
+                "wasop",
+                "yuju",
+                "ola ola",
+                "buenos dias"],
+            "responses":[
+                "hola",
+                "que fue",
+                "epale tu",
+                "buenas",
+                "heu",
+                "hi",
+                "wasop"],
+            "putAttention": false
+        },
+        {
+            "intent": "productos",
+            "patterns": [
+                "estoy interesado",
+                "lista",
+                "que productos tiene?",
+                "precios"],
+            "responses":[
+                "hola estos nuestros productos",
+                "aqui estan los precios"],
+            "putAttention": false
+        }
+    ]
+} 
