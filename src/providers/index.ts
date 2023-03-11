@@ -1,8 +1,14 @@
+import makeWASocket from "@adiwajshing/baileys";
+import { emitter } from "../shared/events/emitter";
 import { Base } from "../shared/interfaces/provider.base.interface";
+import { BaileysProvider } from "./Baileys/baileys.provider";
 
 // Provider extends from base provider which implements an interface that exposes the 
 // required functionality
-export class Proviver extends Base {
+export class Provider extends Base {
+
+    private readonly _emitter = emitter
+    private client!: ReturnType<typeof makeWASocket>
 
     constructor(
         private readonly provider: "baileys" | "wwebjs" | "wppconnect"
@@ -17,7 +23,7 @@ export class Proviver extends Base {
      * @example
      * provider.name
      */
-    protected get name(): string | undefined {
+    get name(): string | undefined {
         return this.provider
     }
 
@@ -31,8 +37,25 @@ export class Proviver extends Base {
      *      session: "bot" 
      * })
      */
-    protected create<T>(options: {} | undefined): T {
-        throw new Error("Method not implemented.");
+    create(options: {} | undefined) {
+        
+        switch (this.provider) {
+            case 'baileys':
+                new BaileysProvider().create().then(client => this.client = client)
+                break
+            default:
+                new BaileysProvider().create().then(client => this.client = client)
+                break
+                
+        }
+    }
+
+    async sendMessage(dest: string, content: any, options: {}|undefined = undefined) {
+        await this.client.sendMessage(dest, content, options)
+    }
+
+    on(event: string, cb: (err: any, message: any) => void) {
+        this._emitter.on(event, cb)
     }
 
 }

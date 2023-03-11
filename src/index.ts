@@ -1,7 +1,11 @@
 // For more information read the file README.md
 
-import { response } from "./util/utils.fn";
+import { Provider } from "./providers";
 
-response('heu')
-.then((response) => console.log(response))
-.catch((err) => console.log(err))
+const provider = new Provider('baileys')
+
+provider.create({})
+
+provider.on('message', (message: any) => {
+    console.log('msg', JSON.stringify(message, undefined, 4));
+})
