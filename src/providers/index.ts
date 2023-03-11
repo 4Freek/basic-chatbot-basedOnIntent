@@ -11,7 +11,7 @@ export class Provider extends Base {
     private client!: ReturnType<typeof makeWASocket>
 
     constructor(
-        private readonly provider: "baileys" | "wwebjs" | "wppconnect"
+        private readonly provider: "baileys" | "wwebjs" | "wppconnect"='baileys'
     ) {
         super();
         this.provider = provider;
@@ -41,10 +41,10 @@ export class Provider extends Base {
         
         switch (this.provider) {
             case 'baileys':
-                new BaileysProvider().create().then(client => this.client = client)
+                new BaileysProvider().create(options).then(client => this.client = client)
                 break
             default:
-                new BaileysProvider().create().then(client => this.client = client)
+                new BaileysProvider().create(options).then(client => this.client = client)
                 break
                 
         }

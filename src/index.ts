@@ -2,10 +2,22 @@
 
 import { Provider } from "./providers";
 
-const provider = new Provider('baileys')
+const args = Object.fromEntries(
+    process.argv.map(a => a.split('=').map(a => a.trim().toLowerCase()))
+)
 
-provider.create({})
+console.log(`Usage: 
+\n you can assign either one between valid providers. Ej.
 
-provider.on('message', (message: any) => {
+    --provider=baileys or --provider=wwebjs
+
+    by default provider is baileys
+`)
+
+const client = new Provider(args['--provider'])
+
+client.create({})
+
+client.on('message', (message: any) => {
     console.log('msg', JSON.stringify(message, undefined, 4));
 })

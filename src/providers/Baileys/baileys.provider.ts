@@ -92,15 +92,19 @@ export class BaileysProvider extends Base {
         return 'baileys'
     }
 
-    async create(): Promise<ReturnType<typeof makeWASocket>|any> {
+    async create(options?: {}): Promise<ReturnType<typeof makeWASocket>|any> {
         const { state, saveCreds } = await useMultiFileAuthState('session'); //
         const { version, isLatest } = await fetchLatestBaileysVersion({})
         console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`)
 
+        let opts = DEFAULT_BAILEYS_CONFIG
+
+        if (options) opts = Object.assign(opts, options)
+
         const sock = makeWASocket({
             version,
             auth: state,
-            ...DEFAULT_BAILEYS_CONFIG
+            ...opts
         });
 
 
