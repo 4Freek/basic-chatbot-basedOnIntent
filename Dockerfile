@@ -1,6 +1,14 @@
 # Pin specific version for stability
 FROM node:19.6-alpine as base
 
+# # 👇 you can use env variables to pin library versions
+ENV TINI_VERSION="v0.19.0"
+
+# 👇
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+# 👆
+
 # Specify working directory other than /
 WORKDIR /app
 
@@ -15,7 +23,7 @@ FROM base as dev
 RUN --mount=type=cache, target=/app/.npm \
 npm set cache /app/.npm && npm install
 
-CMD ["node", "run", "dev"]
+ENTRYPOINT ["/tini", "--", "npm", "run", "dev"]
 
 # ------------------------------------------------------
 
@@ -42,4 +50,4 @@ COPY --chown=node:node ./src/ .
 # Indicate expeceted port
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+ENTRYPOINT ["/tini", "--", "npm", "run", "start"]

@@ -1,10 +1,8 @@
 import makeWASocket, {
-    AnyMessageContent,
     Browsers,
     delay,
     DisconnectReason,
     fetchLatestBaileysVersion,
-    makeInMemoryStore,
     MessageUpsertType,
     MiscMessageGenerationOptions,
     proto,
@@ -16,7 +14,6 @@ import makeWASocket, {
 import { join } from 'path';
 import pino from 'pino';
 import { rimraf } from 'rimraf';
-import qrcode from 'qrcode-terminal';
 import NodeCache from 'node-cache';
 import { emitter } from '../../shared/events/emitter';
 import { Base } from '../../shared/interfaces/provider.base.interface';
